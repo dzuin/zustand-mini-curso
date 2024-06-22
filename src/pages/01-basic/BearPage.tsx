@@ -100,13 +100,44 @@ export const BearsDisplay = () => {
   const doNotthing=useBearStore(state=>state.doNothing)
   const addBears=useBearStore(state=>state.addBears)
   const clearBears=useBearStore(state=>state.clearBears)
+  const totalBears=useBearStore(state=>state.totalBears)
+
+  const agregarOsos=()=>{
+    addBears()
+    totalBears()
+  }
+
+  const sacarOsos=()=>{
+    clearBears()
+    totalBears()
+  }
+
+  /* return (
+    <WhiteCard>
+
+     <h1>Osos</h1>
+     <button onClick={doNotthing}> No Hace Nada</button>
+     <button className="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"
+      onClick={addBears}> Agregar un Oso</button>
+     <button className="mt-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+      onClick={clearBears}> Borrar un Oso</button>
+
+     <pre>
+      {JSON.stringify(bears,null,2)}
+     </pre>
+    </WhiteCard>
+  
+  ) */
+
   return (
     <WhiteCard>
 
      <h1>Osos</h1>
      <button onClick={doNotthing}> No Hace Nada</button>
-     <button className="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded" onClick={addBears}> Agregar un Oso</button>
-     <button className="mt-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" onClick={clearBears}> Borrar un Oso</button>
+     <button className="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"
+      onClick={()=>agregarOsos()}> Agregar un Oso</button>
+     <button className="mt-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+      onClick={()=>sacarOsos()}> Borrar un Oso</button>
 
      <pre>
       {JSON.stringify(bears,null,2)}
@@ -114,4 +145,5 @@ export const BearsDisplay = () => {
     </WhiteCard>
   
   )
+
 }
