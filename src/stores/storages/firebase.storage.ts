@@ -16,6 +16,7 @@ const storageApi: StateStorage={
         try {
             const data=await fetch(`${firebaseUrl}/${name}.json`)
             .then(res=>res.json())
+            console.log("firebase.storage.getItem")
             console.log(data);
             return JSON.stringify(data)
         } catch (error) {
@@ -31,6 +32,7 @@ const storageApi: StateStorage={
             body:value
         })
         .then(res=>res.json())
+        console.log("firebase.storage.setItem")
          console.log(data)
         //sessionStorage.setItem(name,value)
     },

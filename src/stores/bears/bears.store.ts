@@ -78,7 +78,7 @@ interface BearState{
 export const useBearStore = create<BearState>()(
 
   persist(
-
+  //(set,get,store) => ({//Si usamos el contenido del store
   (set,get) => ({
   blackBears: 10,
   polarBears: 5,
@@ -106,6 +106,10 @@ export const useBearStore = create<BearState>()(
  
   totalBears:()=>{
       const total:number=get().blackBears+get().polarBears+get().pandaBears+get().bears.length
+      
+      //console.log("bears.store.ts");
+      //console.log(store);//Imprime el estado del store
+      
       set((state) => ({cantTotalOsos: state.cantTotalOsos=total }))
        return total;
     },
