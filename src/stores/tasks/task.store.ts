@@ -1,7 +1,9 @@
 import { StateCreator, create } from "zustand";
+import { v4 as uuidv4} from "uuid";
 import type { Task,TaskStatus } from "../../interfaces";
-import { devtools } from "zustand/middleware";
-
+import { devtools, persist } from "zustand/middleware";
+//import { produce } from "immer";
+import { immer } from "zustand/middleware/immer";
 
 interface TaskState {
 
@@ -12,13 +14,19 @@ interface TaskState {
     tasks: Record<string, Task>
 
     getTaskByStatus:(status:TaskStatus)=>Task[]
+    addTask:(title:string,status:TaskStatus)=>void
 
     setDraggingTaskId:(taskId:string)=>void
     removeDraggingTaskId:()=>void
+
+    changeTaskStatus:(taskId:string,status:TaskStatus)=>void
+    onTaskDrop:(status:TaskStatus)=>void
+
+    
 }
 
 
-const storeApi:StateCreator<TaskState,[["zustand/devtools", never]]>=(set,get)=>({
+const storeApi:StateCreator<TaskState,[["zustand/devtools", never]],[["zustand/immer", never]]>=(set,get)=>({
 
     draggingTaskId: undefined,
 
@@ -36,11 +44,69 @@ const storeApi:StateCreator<TaskState,[["zustand/devtools", never]]>=(set,get)=>
 
         setDraggingTaskId:(taskId:string)=>{set({draggingTaskId:taskId})},
 
-        removeDraggingTaskId:()=>{set({draggingTaskId:undefined})}
+        removeDraggingTaskId:()=>{set({draggingTaskId:undefined})},
+
+        changeTaskStatus:(taskId:string,status:TaskStatus)=>{
+
+            const task=get().tasks[taskId];
+            task.status=status;
+
+
+            //Forma nativa de zustand
+           //-------------------------
+            /* set((state)=>({
+                tasks:{...state.tasks,[taskId]:task}
+            })) */
+
+            //Utilizando el middleware de immer  immer(storeApi)
+            //--------------------------------------------------
+                set(state=>{
+                    state.tasks[taskId]={...state.tasks[taskId],status};
+                })
+             
+        },
+
+        onTaskDrop:(status:TaskStatus)=>{
+
+            const taskId=get().draggingTaskId
+            if(!taskId) return
+
+            get().changeTaskStatus(taskId,status)
+            get().removeDraggingTaskId()
+        },
+
+        addTask:(title:string,status:TaskStatus)=>{
+         
+         const newTask={id:uuidv4(),title,status}
+
+
+           //Forma nativa de zustand
+           //-------------------------
+           /*  set(state=>({
+            tasks:{...state.tasks,[newTask.id]:newTask}
+          })) */
+          
+
+          //Mutando el objeto usando el (produce) de immer npm i immer
+          //--------------------------------------------------------
+          //set(produce((state:TaskState)=>{state.tasks[newTask.id]=newTask}))
+
+
+          //Utilizando el middleware de immer  immer(storeApi)
+          //--------------------------------------------------
+           set(state =>{
+            state.tasks[newTask.id]=newTask});
+
+        },
+
 })
 
 export const useTaskStore = create<TaskState>()(
     devtools(
-        storeApi
+        persist(//storeApi
+            immer(storeApi),
+            {name:'task-name'}
+        )
+        
     )
 )

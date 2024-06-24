@@ -21,11 +21,11 @@ const doneTask=useTaskStore(state=>state.getTaskByStatus('done'))
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           
-          <JiraTasks title='Pendientes' task={pendingTask}  value='open' />
+          <JiraTasks title='Pendientes' task={pendingTask}  status='open' />
           
-          <JiraTasks title='Avanzando' task={inProgressTask} value='in-progress' />
+          <JiraTasks title='Avanzando' task={inProgressTask} status='in-progress' />
           
-          <JiraTasks title='Terminadas' task={doneTask} value='done' />
+          <JiraTasks title='Terminadas' task={doneTask} status='done' />
 
       </div>
 

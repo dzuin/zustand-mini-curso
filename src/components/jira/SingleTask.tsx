@@ -19,7 +19,7 @@ export const SingleTask = ({task}:Props) => {
 
     onDragEnd={() =>removeDraggingTaskId()}
 
-     className="mt-5 flex items-center justify-between p-2">
+     className="mt-5 flex items-center justify-between p-2 bg-cyan-200 rounded-[5px]">
 
     <div className="flex items-center justify-center gap-2">
       <p className="text-base font-bold text-navy-700">

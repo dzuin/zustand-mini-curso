@@ -1,41 +1,93 @@
-import { IoCheckmarkCircleOutline, IoEllipsisHorizontalOutline} from 'react-icons/io5';
+import { IoAddOutline, IoCheckmarkCircleOutline} from 'react-icons/io5';
 import { Task, TaskStatus } from '../../interfaces';
 import { SingleTask } from './SingleTask';
-import { DragEvent } from 'react';
-import { useTaskStore } from '../../stores';
+//import { DragEvent, useState } from 'react';
+//import { useTaskStore } from '../../stores';
+
+import classNames from 'classnames';
+//import Swal from 'sweetalert2'
+import { useTasks } from '../../hooks/useTasks';
 interface Props {
   title: string;
   task:Task[]
-  value: TaskStatus
+  status: TaskStatus
 }
 
 
-export const JiraTasks = ({ title,value,task }: Props) => {
+export const JiraTasks = ({ title,status,task }: Props) => {
 
-const isDragging=useTaskStore(state=>!!state.draggingTaskId)
+  const {handleAddTask,
+          handleDragOver,
+          handleDragLeave,
+          handleDrop,
+          onDragOver,
+          isDragging
+    } =useTasks({status})
+
+  
+/* const isDragging=useTaskStore(state=>!!state.draggingTaskId)
+const onTaskDrop=useTaskStore(state=>state.onTaskDrop)
+const addTask=useTaskStore(state=>state.addTask)
+
+const [onDragOver,setOnDragOver]=useState(false)
+
+const handleAddTask=async() => {
+  const {isConfirmed,value}= await Swal.fire({
+    title:'Nueva Tarea',
+    input:'text',
+    inputLabel:'Nombre de la Tarea',
+    inputPlaceholder:'Ingrese el Nombre de la Tarea',
+    showCancelButton:true,
+    inputValidator:(value) =>{
+      if(!value){
+        return 'Debe ingresar un nombre para la tarea'
+      }
+      
+    },
+  })
+
+  if(!isConfirmed) return
+  addTask(value,status)
+
+  console.log(value)
+  //addTask('Nuevo titulo',value)
+}
+
 
 //console.log('isDragging:',{isDragging})
 
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault()
     e.stopPropagation();
-    console.log('handleDragOver')
+    setOnDragOver(true)
+    //console.log('handleDragOver')
   }
   const handleDragLeave = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault()
-    console.log('handleDragLeave')
+    setOnDragOver(false)
+    //console.log('handleDragLeave')
   }
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault()
-    console.log('handleDrop',value)
-  }
+    setOnDragOver(false)
+
+    onTaskDrop(status)
+
+    //console.log('handleDrop',value)
+  } */
 
   return (
     <div
        onDragOver={(e)=>{handleDragOver(e)}}
        onDragLeave={(e)=>{handleDragLeave(e)}}
        onDrop={(e)=>handleDrop(e)}
-       className="!text-black border-4 border-blue-500 border-dotted first-letter:relative flex flex-col rounded-[20px]  bg-white bg-clip-border shadow-3xl shadow-shadow-500  w-full !p-4 3xl:p-![18px]">
+       className={
+        classNames("!text-black border-4 first-letter:relative flex flex-col rounded-[20px]  bg-white bg-clip-border shadow-3xl shadow-shadow-500  w-full !p-4 3xl:p-![18px]",
+         {'border-blue-500 border-dotted':isDragging,
+          'border-green-500 border-dotted':isDragging && onDragOver
+
+         })
+       }>
 
       {/* Task Header */ }
       <div className="relative flex flex-row justify-between">
@@ -51,8 +103,8 @@ const isDragging=useTaskStore(state=>!!state.draggingTaskId)
           <h4 className="ml-4 text-xl font-bold text-navy-700">{ title }</h4>
         </div>
 
-        <button>
-          <IoEllipsisHorizontalOutline />
+        <button onClick={handleAddTask} >
+          <IoAddOutline />
         </button>
 
       </div>
