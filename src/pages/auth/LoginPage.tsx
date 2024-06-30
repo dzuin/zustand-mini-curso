@@ -1,12 +1,15 @@
 import { FormEvent } from 'react';
 import { useAuthStore } from '../../stores';
+import { useNavigate } from 'react-router-dom';
 
 export const LoginPage = () => {
 
 
   const loginUsers=useAuthStore(state=>state.loginUser)
 
-  const onSubmit = (event: FormEvent<HTMLFormElement> ) => {
+  const navigate=useNavigate()
+
+  const onSubmit = async(event: FormEvent<HTMLFormElement> ) => {
     event.preventDefault();
     // const { username, password, remember } = event.target as HTMLFormElement;
     const {email, password,remember } = event.target as typeof event.target & {
@@ -14,14 +17,25 @@ export const LoginPage = () => {
       password: { value: string };
       remember: { checked: boolean }
     };
-    
+
     console.log(email.value, password.value, remember.checked);
 
-   /*  email.value = '';
-    password.value = '';
-    remember.checked = false; */
+  
+    try {
 
-    loginUsers(email.value,password.value)
+      await loginUsers(email.value,password.value)
+      navigate('/dashboard')
+
+      /*  email.value = '';
+          password.value = '';
+          remember.checked = false; */
+
+    } catch (error) {
+      console.log('1-Error Dentro del loginPage.tst')
+      console.log('No se pudo Autenticar')
+      console.log(error)
+    }
+    
 
   }
 

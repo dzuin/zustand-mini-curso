@@ -12,7 +12,7 @@ export interface LoginResponse {
 
 
 
-export class Authservice{
+/* export class Authservice{
 
 
     static login=async(email:string, password:string):Promise<LoginResponse>=>{
@@ -51,9 +51,9 @@ export class Authservice{
         
     }
 
-}
+} */
 
-/* export const Authservice={
+export const Authservice={
 
     login:async(email:string, password:string):Promise<LoginResponse>=>{
 
@@ -62,20 +62,47 @@ export class Authservice{
             //const resp= await tesloApi.post<LoginResponse>('/auth/login',{email,password})
             //console.log (resp.data)
             const {data}= await tesloApi.post<LoginResponse>('/auth/login',{email,password})
+            console.log("Dentro del Authservice.ts login")
             console.log (data)
             return data
 
         } catch (error) {
             if (error instanceof AxiosError){
+                console.log("1-Error Dentro del Authservice.ts login")
                 console.log(error.response?.data)
                 throw new Error(error.response?.data)
             }
-            
+            console.log("2-Error Dentro del Authservice.ts login")
             console.log(error)
             throw new Error ('Unable to login, no puede logerase')
 
         }
         
+    },
+
+   checkStatus:async():Promise<LoginResponse>=>{
+
+    try {
+
+        const {data}= await tesloApi.get<LoginResponse>('/auth/check-status',{})
+        console.log("Dentro del Authservice.ts checkStatus")
+    
+        console.log (data)
+        return data
+        
+    } catch (error) {
+
+        if (error instanceof AxiosError){
+            console.log(error.response?.data)
+            throw new Error(error.response?.data)
+        }
+        
+        console.log(error)
+        throw new Error ('UnAuthorized')
+
+        
     }
 
-} */
+  } 
+
+}
