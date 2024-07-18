@@ -67,6 +67,7 @@ const storeApi: StateCreator<AuthState, [["zustand/devtools", never]]> = (set) =
         }
     },
     logoutUser: async ()=>{
+        
         //Nota:
         //Cuando se define un campo:undefined,
         // el zustand borra el contenido del local Storage.
