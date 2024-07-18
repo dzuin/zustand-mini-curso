@@ -120,7 +120,12 @@ export const usePersonStore = create<PersonState & Actions>()(
             })
 )
 
+usePersonStore.subscribe((nextState,prevState) => {
 
+    console.log({nextState,prevState})
+
+    
+})
 
 //Middleware guarda el estado en FireBase
 //----------------------------------------------------------------
