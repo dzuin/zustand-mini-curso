@@ -10,7 +10,7 @@ export const DashboardLayout = () => {
 
   if(authStatus==='pending') {
     checkAuthStatus()
-    return<> Loading......</>
+    return<> Loading......DashBoard pending</>
 
   }
 
