@@ -3,6 +3,7 @@ import { StateCreator, create } from "zustand";
 import {  persist } from "zustand/middleware";
 //import { devtools} from "zustand/middleware";
 import { customSessionStorage } from "../storages/session.storage";
+import { useWeddingBoundStore } from "../wedding";
 //import { fireBaseStorage } from "../storages/firebase.storage";
 //import { logger } from "../middleware/logger.middleware";
 
@@ -120,11 +121,17 @@ export const usePersonStore = create<PersonState & Actions>()(
             })
 )
 
+
+//Para comunicarse entre storage
+//----------------------------------------------------------------
 usePersonStore.subscribe((nextState,prevState) => {
 
     console.log({nextState,prevState})
 
-    
+    const {firstName,lastName} = nextState
+
+    useWeddingBoundStore.getState().setFirstName(firstName)
+    useWeddingBoundStore.getState().setLastName(lastName)
 })
 
 //Middleware guarda el estado en FireBase
